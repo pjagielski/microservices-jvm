@@ -5,7 +5,7 @@
             [ring.middleware.format :refer :all]))
 
 (defroutes app-routes
-  (GET "/:name" [name] {:body {:message (str "Hello World" " " name)}})
+  (GET "/messages/:name" [name] {:body {:message (str "Hello World" " " name)}})
   (route/resources "/")
   (route/not-found "Not Found"))
 
