@@ -7,7 +7,9 @@
     [ring.middleware.format :refer (wrap-restful-format)]
     [compojure.core :refer (defroutes routes)] 
     [ring.adapter.jetty :refer (run-jetty)] 
-    [compojure.route :as route]))
+    [compojure.route :as route]
+    [metrics.ring.expose :refer [expose-metrics-as-json]]
+    [metrics.ring.instrument :refer [instrument]]))
 
 (set-base "http://localhost:3000")
 
@@ -22,6 +24,8 @@
       (handler/api)
       (wrap-swag)
       (wrap-restful-format :formats [:json-kw :edn])))
+
+(def app (expose-metrics-as-json (instrument app) "/stats/"))
 
 (defn -main [& args]
   (run-jetty app {:port 3000 :join? false }))
